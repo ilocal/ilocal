@@ -1,17 +1,16 @@
 import { build } from "esbuild";
 import { globPlugin } from "esbuild-plugin-glob";
+import minimist from "minimist";
 
-// function buildPlugin(options) {
-//   return {
-//     name: "monorepo",
-//     setup(build) {
-//       build.
-//     },
-//   };
-// }
+const args = minimist(process.argv.slice(2));
+const target = args._[0] || "client";
+
+const pkg = `packages/${target}`;
 
 build({
-  entryPoints: ["packages/**/*.ts"],
-  outdir: "packages/dist",
+  entryPoints: [`${pkg}/**/*.ts`],
+  watch: true,
+  outbase: `${pkg}/src`,
+  outdir: `${pkg}/dist`,
   plugins: [globPlugin()],
 });

@@ -5,19 +5,23 @@ importers:
   .:
     specifiers:
       '@types/jest': ^28.1.4
+      '@types/minimist': ^1.2.2
       '@types/node': ^18.0.3
       esbuild: ^0.14.48
       esbuild-plugin-glob: ^1.1.2
       jest: ^28.1.2
+      minimist: ^1.2.6
       ts-jest: ^28.0.5
       ts-node: ^10.8.2
       typescript: ^4.7.4
     devDependencies:
       '@types/jest': 28.1.4
+      '@types/minimist': 1.2.2
       '@types/node': 18.0.3
       esbuild: 0.14.48
       esbuild-plugin-glob: 1.1.2_esbuild@0.14.48
       jest: 28.1.2_eudefza5kbv4z3gj6nnnsfn4wu
+      minimist: 1.2.6
       ts-jest: 28.0.5_3qfdtt56lqgsefigvxjp56wxnq
       ts-node: 10.8.2_fxk5i3xm3ivo7fjwhcizcinpla
       typescript: 4.7.4
@@ -775,6 +779,10 @@ packages:
 
   /@types/mime/1.3.2:
     resolution: {integrity: sha512-YATxVxgRqNH6nHEIsvg6k2Boc1JHI9ZbH5iWFFv/MTkchz3b1ieGDa5T0a9RznNdI0KhVbdbWSN+KWWrQZRxTw==}
+    dev: true
+
+  /@types/minimist/1.2.2:
+    resolution: {integrity: sha512-jhuKLIRrhvCPLqwPcx6INqmKeiA5EWrsCOPhrlFSrbrmU4ZMPjj5Ul/oLCMDO98XRUIwVm78xICz4EPCektzeQ==}
     dev: true
 
   /@types/node/18.0.3:
@@ -2485,6 +2493,10 @@ packages:
     resolution: {integrity: sha512-J7p63hRiAjw1NDEww1W7i37+ByIrOWO5XQQAzZ3VOcL0PNybwpfmV/N05zFAzwQ9USyEcX6t3UO+K5aqBQOIHw==}
     dependencies:
       brace-expansion: 1.1.11
+    dev: true
+
+  /minimist/1.2.6:
+    resolution: {integrity: sha512-Jsjnk4bw3YJqYzbdyBiNsPWHPfO++UGG749Cxs6peCu5Xg4nrena6OVxOYxrQTqww0Jmwt+Ref8rggumkTLz9Q==}
     dev: true
 
   /ms/2.0.0:

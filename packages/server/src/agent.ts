@@ -23,7 +23,6 @@ export default class IlocalAgent extends Agent {
       Object.assign(
         {
           keepAlive: true,
-          maxFreeSockets: 1,
         },
         options
       )

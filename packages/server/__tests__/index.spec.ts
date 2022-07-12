@@ -1,4 +1,4 @@
-import Server from "../src/index";
+import Server from "../src/server";
 
 describe("server", () => {
   const server = new Server();

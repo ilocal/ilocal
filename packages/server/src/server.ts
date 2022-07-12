@@ -1,26 +1,25 @@
-import express from "express";
-import logger from "./logger";
+import app from "./app";
+// import logger from "./logger";
 import http from "http";
 
-interface Options {
-  port: number;
-}
+interface Options {}
 export default class Server {
   server: http.Server;
   constructor(options: Partial<Options> = {}) {
-    // 处理默认参数
-    options = Object.assign(
-      {
-        port: 1024,
-      },
-      options
-    );
+    this.server = http.createServer(app);
 
-    const app = express();
-
-    this.server = app.listen(options.port, () => {
-      logger.info("Server listening on port " + options.port);
-    });
+    this.server
+      .on("request", (req, res) => {
+        const hostname = req.headers.host;
+        console.log(hostname);
+      })
+      .on("upgrade", (req, socket, head) => {
+        const hostname = req.headers.host;
+        if (!hostname) {
+          socket.destroy();
+          return;
+        }
+      });
   }
 
   destroy() {
