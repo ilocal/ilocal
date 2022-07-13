@@ -1,5 +1,6 @@
 import { Agent, AgentOptions } from "http";
 import net from "net";
+import internal from "stream";
 import logger from "./logger";
 
 export default class IlocalAgent extends Agent {
@@ -63,8 +64,7 @@ export default class IlocalAgent extends Agent {
       });
     });
   }
-
-  async connect(callback: (err: Error, socket?: net.Socket) => void) {
+  connect(callback: (err: Error, socket?: internal.Duplex) => void): void {
     if (this.closed) {
       callback(new Error("agent closed"));
       return;
