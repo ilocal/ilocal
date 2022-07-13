@@ -13,7 +13,6 @@ app.get<INewClientReq>("/new", (req, res) => {
   const client = manager.getClient(id);
 });
 app.get("/", (req, res) => {
-  console.log("aaaaa");
   res.send("hello world!");
 });
 
