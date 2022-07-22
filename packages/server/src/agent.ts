@@ -1,22 +1,30 @@
-import { Agent, AgentOptions } from "http";
-import net from "net";
-import internal from "stream";
+import { Agent, AgentOptions, ClientRequestArgs } from "http";
+import net, { Socket } from "net";
 import logger from "./logger";
 
 export default class IlocalAgent extends Agent {
   server: net.Server;
+  port: number = 0;
   started: boolean = false;
   closed: boolean = false;
 
+  availableSockets: net.Socket[] = [];
+
   private onClose() {
     this.closed = true;
+    console.log("Agent closed");
   }
   private onConnection(socket: net.Socket) {
     socket
-      .on("close", (hasError: boolean) => {})
+      .on("close", (hasError: boolean) => {
+        logger.info("Client Closed %s", socket.address());
+      })
       .on("error", (err: Error) => {
+        logger.info("Client Error %s", socket.address());
         socket.destroy();
       });
+    this.availableSockets.push(socket);
+    logger.info("Agent Listening %s", socket.address());
   }
 
   constructor(options?: AgentOptions) {
@@ -29,9 +37,6 @@ export default class IlocalAgent extends Agent {
       )
     );
     this.server = net.createServer();
-
-    this.started = false;
-    this.closed = false;
   }
 
   // Agent 启用
@@ -42,8 +47,8 @@ export default class IlocalAgent extends Agent {
       throw err;
     }
     this.server
-      .on("close", this.onClose)
-      .on("connection", this.onConnection)
+      .once("close", this.onClose.bind(this))
+      .on("connection", this.onConnection.bind(this))
       .on("error", (err) => {
         if (err.name == "ECONNRESET" || err.name == "ETIMEDOUT") {
           return;
@@ -55,33 +60,27 @@ export default class IlocalAgent extends Agent {
       this.server.listen(() => {
         const address = this.server.address();
         if (typeof address === "string") {
-          resolve({ address, family: "", port: 0 });
+          this.port = 0;
+          resolve({ address, family: "", port: this.port });
         } else if (address === null) {
           reject();
         } else {
+          this.port = address.port;
           resolve(address);
         }
       });
     });
   }
-  connect(callback: (err: Error, socket?: internal.Duplex) => void): void {
+
+  createConnection(options: ClientRequestArgs, oncreate: (err: Error, socket: Socket) => void): net.Socket {
+    console.log("createConnection");
     if (this.closed) {
-      callback(new Error("agent closed"));
+      oncreate(new Error("agent closed"), null);
       return;
     }
-    // this.debug('create connection');
-    // // socket is a tcp connection back to the user hosting the site
-    // const sock = this.availableSockets.shift();
-    // // no available sockets
-    // // wait until we have one
-    // if (!sock) {
-    //     this.waitingCreateConn.push(cb);
-    //     this.debug('waiting connected: %s', this.connectedSockets);
-    //     this.debug('waiting available: %s', this.availableSockets.length);
-    //     return;
-    // }
-    // this.debug('socket given');
-    // cb(null, sock);
+    const socket = this.availableSockets.shift();
+    oncreate(null, socket);
+    return socket;
   }
 
   destroy() {

@@ -7,7 +7,7 @@
   "scripts": {
     "build": "tsc",
     "dev": "node --loader ts-node/esm scripts/dev.ts",
-    "server": "pnpm dev server && pnpm -r run start",
+    "server": "pnpm dev server",
     "client": "pnpm dev client",
     "test": "jest"
   },

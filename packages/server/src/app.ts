@@ -1,19 +1,24 @@
 import express from "express";
-import Manager from "./manager";
+import manager from "./manager";
 
 interface INewClientReq {
   id: string;
 }
 
 const app = express();
-const manager = new Manager();
 // 新客户端接入
-app.get<INewClientReq>("/new", (req, res) => {
-  const { id } = req.params;
-  const client = manager.getClient(id);
+app.get<INewClientReq>("/new", async (req, res) => {
+  const { query, hostname } = req;
+  const { id } = query;
+  const { port = 0 } = await manager.getClient(id.toString());
+  res.json({ port, host: `${id}.${hostname}` });
 });
 app.get("/", (req, res) => {
   res.send("hello world!");
+});
+app.all("*", (_req, res) => {
+  console.log("All done!");
+  res.send(404);
 });
 
 export default app;
